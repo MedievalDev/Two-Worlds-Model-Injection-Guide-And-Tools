@@ -6,7 +6,7 @@ Complete guide and tools for importing custom 3D models into Two Worlds 1 or edi
 
 ## Overview
 
-Two Worlds 1 uses a proprietary model format (`.vdf`) with an embedded node tree (NTF) that defines meshes, shaders, textures, and locators. Getting a custom model into the game requires multiple steps across different file formats and tools. This repository bundles everything you need — from Blender export to in-game placement — into one place with step-by-step guides.
+Two Worlds 1 uses a proprietary model format (`.vdf`) with an embedded node tree (NTF) that defines meshes, shaders, textures, and locators. Getting a custom model into the game requires multiple steps across different file formats and tools. This repository bundles everything you need — from importing and editing an existing VDF in Blender to in-game placement — into one place with step-by-step guides.
 
 ### What's Included
 
@@ -26,9 +26,9 @@ Two Worlds 1 uses a proprietary model format (`.vdf`) with an embedded node tree
 Adding a new model to Two Worlds 1 follows these steps:
 
 ```
-1. CREATE MODEL     Blender / 3ds Max / any 3D tool
+1. IMPORT BASE      Blender VDF Plugin → import existing similar VDF as base
                     ↓
-2. EXPORT AS VDF    Blender VDF Plugin → export directly to .vdf
+2. MODIFY & EXPORT  Edit mesh in Blender → export back to VDF (metadata preserved)
                     ↓
 3. SETUP SHADERS    NTF Editor → assign textures, shader type, material properties
                     (or use Transplant to copy shader setup from existing VDF)
@@ -89,7 +89,7 @@ python tw1_par_editor.py
 
 ### VDF (Vertex Data Format)
 
-The game's proprietary 3D model format. Contains vertex data, normals, UVs, and an embedded NTF node tree that defines the material/shader hierarchy. See the [Modding Guide](https://github.com/MedievalDev/Two-Worlds-Modding-Guid) for the full binary specification.
+The game's proprietary 3D model format. Contains vertex data, normals, UVs, and an embedded NTF node tree that defines the material/shader hierarchy. **Important:** New models cannot be created from scratch — you always need to import an existing, similar VDF as a base because the embedded NTF data (shaders, locators, metadata) cannot be reliably generated manually. The Blender plugin preserves this data during roundtrip. See the [Modding Guide](https://github.com/MedievalDev/Two-Worlds-Modding-Guid) for the full binary specification.
 
 ### NTF (Node Tree Format)
 
@@ -136,12 +136,11 @@ This example walks through adding `ROADSIGN_L_14` to the game — a practical re
 
 ### 1. Create or Copy the Model
 
-Start by duplicating an existing road sign VDF:
-```
-Copy ROADSIGN_L_13.vdf → ROADSIGN_L_14.vdf
-```
+Start by importing an existing, similar road sign VDF into Blender via the VDF Plugin. The VDF contains essential metadata (node tree, shader references, locators) that can't be created from scratch — you always need an existing VDF as a base. Modify the mesh in Blender, then export back to VDF. The plugin preserves all original VDF data and only updates the geometry.
 
-Or create a new model in Blender and export directly to VDF with the Blender VDF Plugin.
+```
+Import ROADSIGN_L_13.vdf into Blender → modify mesh → export as ROADSIGN_L_14.vdf
+```
 
 ### 2. Edit Textures with NTF Editor
 
