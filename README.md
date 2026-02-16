@@ -126,10 +126,9 @@ Game Root/
 ├── Textures/
 │   └── ROADSIGN_02.dds              (your .dds textures referenced by shaders)
 ├── Parameters/
-│   ├── TwoWorlds.par                (object definitions)
-│   └── EditorDef                    (editor object browser list)
-└── WDFiles/
-    └── YourMod.wd                   (packed mod archive)
+    ├── TwoWorlds.par                (object definitions)
+    └── EditorDef                    (editor object browser list)
+
 ```
 
 ## Step-by-Step Example: Adding a New Road Sign
