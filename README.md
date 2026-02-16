@@ -123,6 +123,8 @@ Game Root/
 │       └── ROADSIGNS/
 │           ├── ROADSIGN_L_14.vdf    (3D model)
 │           └── ROADSIGN.mtr         (material reference)
+├── Textures/
+│   └── ROADSIGN_02.dds              (your .dds textures referenced by shaders)
 ├── Parameters/
 │   ├── TwoWorlds.par                (object definitions)
 │   └── EditorDef                    (editor object browser list)
@@ -174,6 +176,7 @@ ROADSIGN_STICK
 ```
 Models/ADDONS/ROADSIGNS/ROADSIGN_L_14.vdf     (your model)
 Models/ADDONS/ROADSIGNS/ROADSIGN.mtr           (update if new textures added)
+Textures/ROADSIGN_NEW.dds                       (your new textures, if any)
 Parameters/TwoWorlds.par                        (with new entry)
 Parameters/EditorDef                            (with new name)
 ```
