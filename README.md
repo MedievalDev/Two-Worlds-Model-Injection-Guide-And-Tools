@@ -1,4 +1,3 @@
-
 # Two Worlds 1 — Model Injection Guide & Tools
 
 Complete guide and tools for importing custom 3D models into Two Worlds 1 or editing existing ones. Covers VDF format, Blender workflow, material/shader setup, NTF node structure, and editor integration.
@@ -11,42 +10,25 @@ Two Worlds 1 uses a proprietary model format (`.vdf`) with an embedded node tree
 
 ### What's Included
 
-- 🔧 **VDF-to-OBJ Converter** — extract 3D models from game files to standard OBJ format
-- 🔧 **OBJ-to-VDF Converter** — convert OBJ models back into the game's VDF format
 - 🔧 **Blender VDF Plugin** — native Blender import/export for VDF files (byte-identical roundtrip)
 - 🔧 **NTF Editor** — GUI editor for the VDF/NTF node tree (shaders, textures, locators, shader transplant)
+- 🔧 **PAR Editor** — GUI editor for `TwoWorlds.par` to register new objects, edit parameters, and manage entries
 - 📖 **Step-by-step guide** — full workflow from modeling to in-game placement (EN/DE)
 
-## Screenshots
+### What You Also Need
 
-### NTF Editor — Shader & Texture Setup
-![NTF Editor showing shader node tree with texture slots](screenshots/ntf_editor_shader.png)
-
-*The NTF Editor lets you inspect and edit every node in a VDF file — shaders, textures, locators, and model references. Use the Transplant feature to copy a working shader setup from one VDF to another.*
-
-### PAR Editor — Registering New Objects
-![PAR Editor showing new ROADSIGN entry with right-click menu](screenshots/par_editor_new_entry.png)
-
-*After creating your model, register it in `TwoWorlds.par` using the PAR Editor. Duplicate an existing entry, rename it, and update the mesh path. Right-click menu provides Duplicate, Rename, and Delete.*
-
-### EditorDef.txt — Making Objects Available in the Editor
-![EditorDef.txt with ROADSIGN entries](screenshots/editordef_entries.png)
-
-*Add your new object name to `EditorDef.txt` so it appears in the Two Worlds Editor's object browser. Group entries with `group BL <name> { ... }` blocks.*
-
-### File Structure — What Goes Where
-![File explorer showing VDF and MTR files in ROADSIGNS folder](screenshots/file_structure.png)
-
-*Your model (`.vdf`) and material (`.mtr`) files go into the matching subfolder under `Models/`. The folder structure must match the mesh path defined in the PAR entry.*
+- 📦 **WD Repacker** — pack your files into `.wd` archives for the game → [Download (ModDB)](https://www.moddb.com/games/two-worlds/downloads)
+- 📦 **Mod Selector** — enable/disable mods and manage WD load order → [Download (ModDB)](https://www.moddb.com/games/two-worlds/downloads)
+- 📦 **Two Worlds SDK** — official editor for placing objects on maps → [Download (ModDB)](https://www.moddb.com/games/two-worlds/downloads/two-worlds-software-development-kit-tools-13-installer)
 
 ## Workflow Overview
 
 Adding a new model to Two Worlds 1 follows these steps:
 
 ```
-1. CREATE MODEL     Blender / 3ds Max / any 3D tool → export as OBJ
+1. CREATE MODEL     Blender / 3ds Max / any 3D tool
                     ↓
-2. CONVERT TO VDF   OBJ-to-VDF Converter or Blender VDF Plugin
+2. EXPORT AS VDF    Blender VDF Plugin → export directly to .vdf
                     ↓
 3. SETUP SHADERS    NTF Editor → assign textures, shader type, material properties
                     (or use Transplant to copy shader setup from existing VDF)
@@ -55,28 +37,16 @@ Adding a new model to Two Worlds 1 follows these steps:
                     ↓
 5. EDITORDEF        Add entry name to EditorDef.txt
                     ↓
-6. PACK & TEST      Pack files into .wd archive → place object in editor → test
+6. PACK & TEST      WD Repacker → pack into .wd → place object in editor → test
 ```
 
 ## Tools
 
 | Tool | Description | Formats |
 |------|-------------|---------|
-| **VDF-to-OBJ Converter** | Extract models from VDF to standard OBJ/MTL | `.vdf` → `.obj` |
-| **OBJ-to-VDF Converter** | Convert OBJ models into game format | `.obj` → `.vdf` |
 | **Blender VDF Plugin** | Native Blender import/export, byte-identical roundtrip | `.vdf` ↔ Blender |
 | **NTF Editor v1.0** | GUI editor for VDF node tree — shaders, textures, locators | `.vdf` / `.ntf` |
-
-## Required External Tools
-
-These tools are not part of this repository but are needed for the full workflow:
-
-| Tool | Purpose | Source |
-|------|---------|--------|
-| **TW1 PAR Editor** | Register new objects in `TwoWorlds.par` | [GitHub](https://github.com/MedievalDev/TwoWorlds_PAR_Editor) |
-| **WD Repacker** | Pack files into `.wd` archives for the game | [ModDB](https://www.moddb.com/games/two-worlds/downloads) |
-| **Mod Selector** | Enable/disable mods, manage WD load order | [ModDB](https://www.moddb.com/games/two-worlds/downloads) |
-| **Two Worlds SDK** | Official editor, EarthC compiler, documentation | [ModDB](https://www.moddb.com/games/two-worlds/downloads/two-worlds-software-development-kit-tools-13-installer) |
+| **PAR Editor v1.3** | Register objects, edit parameters, compare & merge PAR files | `.par` / `.json` |
 
 For a complete overview of all available modding tools, see the [TW1 Modding Hub](https://github.com/MedievalDev/Two-Worlds-Modding-HUB).
 
@@ -96,10 +66,11 @@ For a complete overview of all available modding tools, see the [TW1 Modding Hub
 
 ```
 YourModdingFolder/
-├── vdf_to_obj.py              (VDF to OBJ converter)
-├── obj_to_vdf.py              (OBJ to VDF converter)
 ├── ntf_editor.py              (NTF Editor GUI)
-├── blender_vdf_plugin/        (Blender addon folder)
+├── tw1_par_editor.py           (PAR Editor GUI)
+├── tw1_sdk_labels.json         (1808 SDK field labels for PAR Editor)
+├── tw1_sdk_descriptions.json   (1666 tooltip descriptions for PAR Editor)
+├── blender_vdf_plugin/         (Blender addon folder)
 │   └── __init__.py
 └── guides/
     ├── model_injection_en.md
@@ -111,8 +82,7 @@ YourModdingFolder/
 4. Run any tool directly:
 ```
 python ntf_editor.py
-python vdf_to_obj.py model.vdf output.obj
-python obj_to_vdf.py model.obj output.vdf
+python tw1_par_editor.py
 ```
 
 ## File Formats
@@ -171,7 +141,7 @@ Start by duplicating an existing road sign VDF:
 Copy ROADSIGN_L_13.vdf → ROADSIGN_L_14.vdf
 ```
 
-Or create a new model in Blender and export with the VDF plugin.
+Or create a new model in Blender and export directly to VDF with the Blender VDF Plugin.
 
 ### 2. Edit Textures with NTF Editor
 
@@ -211,7 +181,7 @@ Parameters/EditorDef                            (with new name)
 
 ### 6. Pack and Test
 
-Pack everything into a `.wd` archive using the [WD Repacker](https://www.moddb.com/games/two-worlds/downloads). Place the `.wd` file in the game's `WDFiles/` folder. Launch the Two Worlds Editor — your new road sign should appear in the object browser under its group.
+Pack everything into a `.wd` archive using the [WD Repacker](https://www.moddb.com/games/two-worlds/downloads). Place the `.wd` file in the game's `WDFiles/` folder. Enable it with the [Mod Selector](https://www.moddb.com/games/two-worlds/downloads). Launch the Two Worlds Editor — your new road sign should appear in the object browser under its group.
 
 ## Mesh Field Syntax
 
